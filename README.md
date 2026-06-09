@@ -1,136 +1,185 @@
-# 🐘 Tutorial: Configuración de PostgreSQL y pgAdmin 4 en GitHub Codespaces
+# Laboratorio PostgreSQL con GitHub Codespaces
 
-¡Bienvenido! En esta guía aprenderás a instalar, configurar y arrancar un entorno completo de base de datos relacional utilizando **PostgreSQL** y la interfaz web **pgAdmin 4**, todo corriendo de forma online dentro de tu entorno de desarrollo en la nube (GitHub Codespaces).
+Este laboratorio permite trabajar con PostgreSQL y pgAdmin directamente desde el navegador, sin necesidad de instalar software en el computador.
 
-> ⚠️ **Nota importante:** Este entorno está diseñado para fines educativos. Al ser un contenedor virtual temporal, los datos que crees en la base de datos se borrarán cuando el Codespace se destruya o se reinicie. ¡Es una excelente oportunidad para practicar comandos sin miedo a romper nada!
+## Requisitos
 
----
-
-## 🛠️ Paso 1: Instalar PostgreSQL
-
-Lo primero que haremos será actualizar el gestor de paquetes de Linux e instalar el servidor de bases de datos.
-
-1. Abre una **Terminal** en tu Codespace.
-2. Ejecuta el siguiente comando para actualizar la lista de paquetes e instalar PostgreSQL:
-   ```bash
-   sudo apt update && sudo apt install postgresql -y
-
-```
+* Cuenta de GitHub.
+* Acceso a GitHub Codespaces.
 
 ---
 
-## 🔑 Paso 2: Iniciar el Servicio y Configurar la Contraseña
+## 1. Crear una copia del repositorio
 
-Por defecto, PostgreSQL se instala pero no se inicia automáticamente en entornos de Codespaces. Además, el usuario administrador (`postgres`) viene sin una contraseña asignada.
-
-1. **Enciende el servidor de bases de datos** ejecutando:
-```bash
-sudo service postgresql start
-
-```
-
-
-*(Si quieres verificar que encendió correctamente, puedes usar `sudo service postgresql status`)*.
-2. **Asigna una contraseña al usuario administrador.** Para evitar que el sistema te pida claves de administrador de Linux, utilizaremos el comando directo de la siguiente manera (usaremos la contraseña fácil `1234` para este laboratorio):
-```bash
-sudo -u postgres psql -c "ALTER USER postgres PASSWORD '1234';"
-
-```
-
-
+Haz clic en **Fork** para crear una copia del repositorio en tu cuenta de GitHub.
 
 ---
 
-## 🌐 Paso 3: Instalar pgAdmin 4 (Versión Web)
+## 2. Crear el Codespace
 
-Dado que estamos trabajando completamente en la nube, instalaremos la versión web de pgAdmin para poder gestionarlo todo desde el navegador.
+1. Abre tu fork del repositorio.
+2. Haz clic en **Code**.
+3. Selecciona la pestaña **Codespaces**.
+4. Haz clic en **Create codespace on main**.
 
-1. **Agrega la llave de seguridad del repositorio oficial de pgAdmin:**
-```bash
-curl -fsS [https://www.pgadmin.org/static/packages_pgadmin_org.pub](https://www.pgadmin.org/static/packages_pgadmin_org.pub) | sudo gpg --dearmor -o /usr/share/keyrings/pgadmin-archive-keyring.gpg
-
-```
-
-
-2. **Añade el repositorio oficial a las fuentes del sistema:**
-```bash
-echo "deb [signed-by=/usr/share/keyrings/pgadmin-archive-keyring.gpg] [https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$](https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$)(lsb_release -cs) pgadmin4 main" | sudo tee /etc/apt/sources.list.d/pgadmin4.list
-
-```
-
-
-3. **Actualiza e instala la versión web de pgAdmin:**
-```bash
-sudo apt update && sudo apt install pgadmin4-web -y
-
-```
-
-
+La primera creación puede tardar algunos minutos mientras GitHub prepara el entorno.
 
 ---
 
-## 📝 Paso 4: Configurar tu Cuenta de pgAdmin 4
+## 3. Abrir el Codespace
 
-Las versiones actuales de pgAdmin manejan su propio entorno aislado de Python. Para inicializar la base de datos de usuarios, usaremos su comando específico:
+Cuando el entorno termine de iniciar, se recomienda seleccionar:
 
-1. Ejecuta el asistente de inicialización:
-```bash
-sudo /usr/pgadmin4/venv/bin/python3 /usr/pgadmin4/web/setup.py setup-db
+**Open in Visual Studio Code**
 
-```
+Esta opción suele ser más estable que la versión web cuando la carga inicial del navegador presenta problemas.
 
-
-2. La terminal te solicitará los siguientes datos interactivamente:
-* **Email address:** Introduce un correo electrónico (puede ser ficticio, por ejemplo: `alumno@clase.com`). Este será tu usuario de inicio de sesión.
-* **Password:** Ingresa una contraseña para tu cuenta web de pgAdmin y luego repítela para confirmar.
-
-
+También puedes utilizar la versión web si prefieres trabajar completamente desde el navegador.
 
 ---
 
-## 🚀 Paso 5: Arrancar el Servidor Web de pgAdmin y Exponer el Puerto
+## 4. Abrir pgAdmin
 
-Para poder ver la interfaz gráfica en nuestro navegador, debemos encender el servicio web interno de pgAdmin.
+1. En Visual Studio Code abre la pestaña **Ports**.
+2. Busca el puerto etiquetado como **pgAdmin**.
+3. Haz clic en **Open in Browser**.
 
-1. **Ejecuta el servidor web** con el siguiente comando:
-```bash
-sudo /usr/pgadmin4/venv/bin/python3 /usr/pgadmin4/web/pgAdmin4.py
-
-```
-
-
-*Nota: Verás que la terminal se queda ejecutando este proceso en primer plano y "escuchando". No la cierres.*
-2. **Hacer público el puerto en Codespaces (CRUCIAL):**
-* En la parte inferior de VS Code, ve a la pestaña **Ports** (Puertos).
-* Busca el puerto que se ha abierto automáticamente (suele ser el `5050` o el `80`).
-* Haz **clic derecho** sobre ese puerto en la lista y selecciona **Port Visibility** -> **Public**.
-* *¿Por qué hacemos esto?* Si el puerto se mantiene privado, los sistemas de seguridad de GitHub bloquearán las cookies y no te dejarán iniciar sesión en pgAdmin.
-
-
-3. Haz clic en el icono del **globo terráqueo / abrir en el navegador** que aparece al lado del puerto modificado. ¡Se abrirá una nueva pestaña con pgAdmin 4!
+No es necesario cambiar la visibilidad de los puertos a Público.
 
 ---
 
-## 🔌 Paso 6: Conectarse al Servidor de PostgreSQL desde pgAdmin
+## 5. Iniciar sesión en pgAdmin
 
-Una vez dentro de la web de pgAdmin, inicia sesión con el **Email** y **Contraseña** que creaste en el **Paso 4**. Ahora vincularemos la interfaz con la base de datos que instalamos al principio:
+Utiliza las siguientes credenciales:
 
-1. Haz clic en **Add New Server** (Añadir nuevo servidor).
-2. En la pestaña **General**:
-* En el campo **Name**, escribe un nombre identificativo para tu clase (por ejemplo: `Servidor Local`).
+**Correo:**
 
+```text
+alumno@postgres.com
+```
 
-3. Cambia a la pestaña **Connection** (Conexión) y rellena los campos exactamente así:
-* **Host name/address:** `127.0.0.1` *(apunta a la propia máquina del Codespace)*
-* **Port:** `5432` *(puerto por defecto de Postgres)*
-* **Maintenance database:** `postgres`
-* **Username:** `postgres` *(es el superusuario que creamos en el paso 2, asegúrate de cambiar el que venga por defecto)*
-* **Password:** `1234` *(o la contraseña que elegiste en el paso 2)*
-* Activa la casilla **Save password?** para mayor comodidad.
+**Contraseña:**
 
+```text
+1234
+```
 
-4. Haz clic en **Save** (Guardar).
+---
 
-¡Listo! Verás cómo se despliega el árbol de servidores a la izquierda. Ya puedes crear tablas, ejecutar consultas SQL y gestionar tu base de datos de manera 100% interactiva.
+## 6. Registrar el servidor PostgreSQL
 
+La primera vez que ingreses a pgAdmin deberás registrar el servidor.
 
+### Pestaña General
+
+**Name**
+
+```text
+PostgreSQL Local
+```
+
+### Pestaña Connection
+
+**Host name/address**
+
+```text
+postgres
+```
+
+**Port**
+
+```text
+5432
+```
+
+**Maintenance database**
+
+```text
+postgres
+```
+
+**Username**
+
+```text
+postgres
+```
+
+**Password**
+
+```text
+1234
+```
+
+Marca la opción:
+
+```text
+Save Password
+```
+
+y presiona **Save**.
+
+---
+
+## 7. Verificar la conexión
+
+Si la configuración es correcta, aparecerá el servidor en el panel izquierdo de pgAdmin y podrás:
+
+* Crear bases de datos.
+* Crear tablas.
+* Ejecutar consultas SQL.
+* Administrar usuarios.
+* Exportar e importar datos.
+
+---
+
+## Solución de problemas
+
+### La página de pgAdmin no carga
+
+1. Espera unos segundos y vuelve a intentarlo.
+2. Verifica que el Codespace haya terminado de iniciarse.
+3. Si utilizas la versión web y sigue fallando, abre el Codespace mediante **Open in Visual Studio Code** y vuelve a abrir el puerto desde la pestaña **Ports**.
+
+### No puedo conectarme al servidor
+
+Verifica que los datos sean exactamente:
+
+```text
+Host: postgres
+Puerto: 5432
+Usuario: postgres
+Contraseña: 1234
+```
+
+No utilices:
+
+```text
+localhost
+127.0.0.1
+URLs públicas de Codespaces
+```
+
+ya que PostgreSQL se encuentra en un contenedor interno accesible mediante el nombre `postgres`.
+
+---
+
+## Credenciales del laboratorio
+
+### pgAdmin
+
+```text
+Correo: alumno@postgres.com
+Contraseña: 1234
+```
+
+### PostgreSQL
+
+```text
+Host: postgres
+Puerto: 5432
+Usuario: postgres
+Contraseña: 1234
+Base de datos: postgres
+```
+
+![pgAdmin](docs/images/pgadmin.png)

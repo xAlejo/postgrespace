@@ -150,6 +150,8 @@ Si la configuración es correcta, aparecerá el servidor en el panel izquierdo d
 > ![port-vscode](docs/images/pgadmin.png)
 ---
 
+## 8. Dale Like al repositorio si te ha sido útil para tu aprendizaje de PostgreSQL.
+
 ## Solución de problemas
 
 ### La página de pgAdmin no carga

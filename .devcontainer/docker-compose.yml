@@ -48,6 +48,7 @@ services:
       # Pre-registra el servidor PostgreSQL: los alumnos no tienen que
       # registrarlo a mano, ya aparece bajo "Servers" al abrir pgAdmin.
       - ./pgadmin/servers.json:/pgadmin4/servers.json
+      - ./pgadmin/pgpassfile:/pgpassfile
       # Montar data/ directamente sobre el subdirectorio del usuario de pgAdmin.
       # pgAdmin escribe los backups en /var/lib/pgadmin/storage/postgres_sql.dev/
       # y como ese path ya existe como mount point, no intenta crearlo ni hacerle chmod 700.

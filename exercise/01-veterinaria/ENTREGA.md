@@ -64,3 +64,6 @@ tu **fork** y abre un **Pull Request** hacia el repositorio del curso.
 
 > ¿No sabes aún qué es un Pull Request? No te preocupes: tu instructor te explicará este paso.
 > Lo importante primero es tener tus archivos bien ubicados en tu carpeta.
+
+
+[![Cómo hacer un Pull Request — video tutorial](https://img.youtube.com/vi/t_X2NIJVPm0/maxresdefault.jpg)](https://www.youtube.com/watch?v=t_X2NIJVPm0)

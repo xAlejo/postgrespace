@@ -133,7 +133,7 @@ inmediato. El resto de las tablas las irás creando tú en los ejercicios. Desde
 * Administrar usuarios.
 * Exportar e importar datos.
 
-> ![port-vscode](images/pgadmin.png)
+> ![port-vscode](images/veterinariadb.png)
 
 ---
 

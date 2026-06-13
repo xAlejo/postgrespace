@@ -10,6 +10,8 @@ ejemplo. Un *tutor* es la persona dueña de una o varias mascotas.
 > En pgAdmin, panel izquierdo → `Servers → PostgreSQL Curso → Databases → veterinariadb`,
 > haz clic derecho → **Query Tool**. Ahí escribirás y ejecutarás el SQL (botón ▶ o `F5`).
 
+![query_tool](../../docs/images/query_tool.png)
+
 ---
 
 ## Paso 1.1 — Mira lo que ya existe (LEER)

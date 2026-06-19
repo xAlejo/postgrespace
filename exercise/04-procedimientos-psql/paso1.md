@@ -127,8 +127,13 @@ proyecto en VS Code.
 
 ### Si usas instalación local
 
-En pgAdmin puedes elegir cualquier carpeta de tu computadora. Guárdalo en una ubicación
-que recuerdes, por ejemplo tu escritorio o la carpeta del proyecto.
+En pgAdmin puedes navegar a cualquier carpeta. Usa el botón de carpeta junto al campo
+**Filename** para navegar hasta la carpeta `04-procedimientos-psql` dentro de tu entrega,
+y escribe el nombre:
+
+```
+paso1_backup.sql
+```
 
 ---
 
@@ -140,10 +145,14 @@ en un PostgreSQL vacío, recrea todo.
 
 ## Paso 1.4 — Backup desde la terminal con `pg_dump`
 
-`pg_dump` hace lo mismo que pgAdmin, pero desde la terminal. Con él puedes **elegir
-exactamente dónde queda el archivo** — incluso directo en tu carpeta de entrega.
+`pg_dump` hace lo mismo que pgAdmin, pero desde la terminal. Con él puedes guardar
+el archivo **directamente en tu carpeta de entrega** en un solo comando.
 
-Primero crea la carpeta de entrega si aún no existe (reemplaza con tu apellido y nombre):
+### Si usas Codespaces
+
+El terminal de VS Code abre en la raíz del repositorio, así que las rutas relativas
+funcionan directamente. Crea la carpeta de entrega si no existe (reemplaza con tu
+apellido y nombre):
 
 ```bash
 mkdir -p entregas/apellido_nombre/04-procedimientos-psql
@@ -155,15 +164,29 @@ Luego genera el backup directamente ahí:
 pg_dump -U postgres -d veterinariadb > entregas/apellido_nombre/04-procedimientos-psql/paso1_backup.sql
 ```
 
+### Si usas instalación local
+
+Abre el terminal de VS Code (**Terminal → New Terminal**): se abre en la carpeta raíz
+de tu proyecto. Desde ahí las rutas relativas también funcionan — el comando es
+exactamente el mismo:
+
+```bash
+mkdir -p entregas/apellido_nombre/04-procedimientos-psql
+pg_dump -U postgres -d veterinariadb > entregas/apellido_nombre/04-procedimientos-psql/paso1_backup.sql
+```
+
+> 💡 Si te pide contraseña, agrega `-W` al comando: `pg_dump -U postgres -W -d veterinariadb > ...`
+
+---
+
 | Parte | Qué significa |
 |---|---|
 | `-U postgres` | usuario de PostgreSQL |
 | `-d veterinariadb` | base de datos a exportar |
-| `> entregas/apellido_nombre/04-.../paso1_backup.sql` | guarda la salida en tu carpeta de entrega |
+| `> entregas/.../paso1_backup.sql` | redirige la salida al archivo en tu carpeta de entrega |
 
-Abre el archivo desde VS Code y compáralo con el de pgAdmin del paso anterior: el
-contenido es prácticamente idéntico. La diferencia es que con `pg_dump` controlaste
-exactamente dónde quedó, sin pasos intermedios.
+Abre el archivo desde VS Code y compáralo con el de pgAdmin: el contenido es
+prácticamente idéntico. Con `pg_dump` el archivo quedó en tu entrega sin pasos intermedios.
 
 ---
 
@@ -184,6 +207,8 @@ El flag `-c` ejecuta un comando SQL desde la terminal sin entrar al prompt inter
 ```bash
 psql -U postgres -d veterinaria_respaldo < entregas/apellido_nombre/04-procedimientos-psql/paso1_backup.sql
 ```
+
+> 💡 Reemplaza `apellido_nombre` con el nombre de tu carpeta de entrega.
 
 Verás mensajes como `SET`, `CREATE TABLE`, `INSERT`... PostgreSQL ejecuta tu archivo
 línea por línea. Si termina sin `ERROR`, la restauración fue exitosa. ✅

@@ -33,13 +33,14 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: postgres@sql.dev
       PGADMIN_DEFAULT_PASSWORD: 1234
-      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "False"
-      # Tras el proxy HTTPS de Codespaces la cookie de sesion necesita
-      # SameSite=None; Secure para viajar en las peticiones del SPA. Sin esto,
-      # el login funciona pero las XHR autenticadas devuelven 401 y la pagina
-      # queda en blanco. Los valores son literales de Python (verbatim).
-      PGADMIN_CONFIG_SESSION_COOKIE_SECURE: "True"
-      PGADMIN_CONFIG_SESSION_COOKIE_SAMESITE: "'None'"
+      # Modo escritorio: pgAdmin no pide login, asi que no hay sesion ni cookie.
+      # Esto elimina de raiz el bug del proxy HTTPS de Codespaces: al terminar
+      # el SSL en el proxy, pgAdmin (que internamente ve HTTP) generaba la
+      # cookie de login invalida y las XHR autenticadas (preferences/get_all,
+      # misc/bgprocess, status...) devolvian 401 -> pagina en blanco. En un
+      # laboratorio de un solo usuario local no hace falta el modo servidor.
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
     ports:
       - "5050:80"
     volumes:
